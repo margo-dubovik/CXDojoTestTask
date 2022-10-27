@@ -2,6 +2,7 @@ import csv
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import re
+from fuzzywuzzy import fuzz, process
 
 
 def read_csv(folder, csv_file):
@@ -37,7 +38,6 @@ def remove_empty_records(data, fields):
 
 def clean_data(data, fields):
     data = remove_empty_records(data, fields)
-    print("REMOVED EMPTY\n")
 
     for item in data:
         for field in fields:
@@ -48,6 +48,31 @@ def clean_data(data, fields):
                 item[field] = re.sub('\(.*\)', "", item[field])  # remove data in parentheses
                 item[field] = re.sub('\[.*\]', "", item[field])  # remove data in square brackets
     return data
+
+
+def match_names(csv_users, xml_users):
+    # collecting names for comparing
+    names = []
+    for xml_user in xml_users:
+        name = str(xml_user['first_name'] or '') + str(xml_user['last_name'] or '')
+        names.append(name)
+    print("Names: ", names)
+
+    res = []
+    for csv_user in csv_users:
+        username = csv_user['username'].replace('.', ' ')
+        ratios = process.extract(username, names)
+        print("username=", username)
+        print("ratios=", ratios)
+        highest = process.extractOne(username, names)
+        print("highest=", highest)
+        if highest[1] > 60:
+            print("APPROVED")
+            xml_record = xml_users[names.index(highest[0])]
+            names[names.index(highest[0])] = ''
+            res.append({**csv_user, **xml_record})
+    print("Names left:", names)
+    return res
 
 
 def collect_users_data(folder, csv_file, xml_file):
@@ -63,6 +88,11 @@ def collect_users_data(folder, csv_file, xml_file):
     print("=========================================================")
     for usr in users_from_xml_clean:
         print(usr)
+
+    pairs = match_names(users_from_csv_clean, users_from_xml_clean)
+    print("PAIRS:")
+    for pair in pairs:
+        print(pair)
 
 
 if __name__ == '__main__':
