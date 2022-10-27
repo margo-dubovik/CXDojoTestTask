@@ -56,22 +56,17 @@ def match_names(csv_users, xml_users):
     for xml_user in xml_users:
         name = str(xml_user['first_name'] or '') + str(xml_user['last_name'] or '')
         names.append(name)
-    print("Names: ", names)
 
     res = []
     for csv_user in csv_users:
         username = csv_user['username'].replace('.', ' ')
-        ratios = process.extract(username, names)
-        print("username=", username)
-        print("ratios=", ratios)
+
         highest = process.extractOne(username, names)
-        print("highest=", highest)
+
         if highest[1] > 60:
-            print("APPROVED")
             xml_record = xml_users[names.index(highest[0])]
             names[names.index(highest[0])] = ''
             res.append({**csv_user, **xml_record})
-    print("Names left:", names)
     return res
 
 
@@ -81,18 +76,19 @@ def collect_users_data(folder, csv_file, xml_file):
 
     users_from_csv_clean = clean_data(users_from_csv, ['username'])
     users_from_xml_clean = clean_data(users_from_xml, ['first_name', 'last_name'])
+    #
+    # for usr in users_from_csv_clean:
+    #     print(usr)
 
-    for usr in users_from_csv_clean:
-        print(usr)
+    # print("=========================================================")
+    # for usr in users_from_xml_clean:
+    #     print(usr)
 
-    print("=========================================================")
-    for usr in users_from_xml_clean:
-        print(usr)
-
-    pairs = match_names(users_from_csv_clean, users_from_xml_clean)
-    print("PAIRS:")
-    for pair in pairs:
-        print(pair)
+    matched_data = match_names(users_from_csv_clean, users_from_xml_clean)
+    # print("PAIRS:")
+    # for pair in pairs:
+    #     print(pair)
+    return matched_data
 
 
 if __name__ == '__main__':
@@ -100,4 +96,6 @@ if __name__ == '__main__':
     csv_file = "test_task.csv"
     xml_file = "test_task.xml"
 
-    collect_users_data(folder, csv_file, xml_file)
+    complete_user_data = collect_users_data(folder, csv_file, xml_file)
+    for record in complete_user_data:
+        print(record)
