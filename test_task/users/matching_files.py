@@ -1,21 +1,19 @@
 import csv
-from pathlib import Path
 import xml.etree.ElementTree as ET
 import re
-from fuzzywuzzy import fuzz, process
+from fuzzywuzzy import process
+from django.core.files.storage import default_storage
 
 
-def read_csv(folder, csv_file):
-    p = Path.cwd()
-    with open(p / folder / csv_file) as f:
+def read_csv(csv_file_name):
+    with default_storage.open(csv_file_name, 'r') as f:
         csv_dict_reader = csv.DictReader(f, delimiter=',')
         users_lst_of_dicts = list(csv_dict_reader)
     return users_lst_of_dicts
 
 
-def read_xml(folder, xml_file):
-    p = Path.cwd()
-    with open(p / folder / xml_file) as f:
+def read_xml(xml_file_name):
+    with default_storage.open(xml_file_name, 'r') as f:
         tree = ET.parse(f)
     root = tree.getroot()
 
@@ -70,24 +68,15 @@ def match_names(csv_users, xml_users):
     return res
 
 
-def collect_users_data(folder, csv_file, xml_file):
-    users_from_csv = read_csv(folder, csv_file)
-    users_from_xml = read_xml(folder, xml_file)
+def collect_users_data(csv_file_name, xml_file_name):
+    users_from_csv = read_csv(csv_file_name)
+    users_from_xml = read_xml(xml_file_name)
 
     users_from_csv_clean = clean_data(users_from_csv, ['username'])
     users_from_xml_clean = clean_data(users_from_xml, ['first_name', 'last_name'])
-    #
-    # for usr in users_from_csv_clean:
-    #     print(usr)
-
-    # print("=========================================================")
-    # for usr in users_from_xml_clean:
-    #     print(usr)
 
     matched_data = match_names(users_from_csv_clean, users_from_xml_clean)
-    # print("PAIRS:")
-    # for pair in pairs:
-    #     print(pair)
+
     return matched_data
 
 
