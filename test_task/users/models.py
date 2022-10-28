@@ -11,11 +11,3 @@ class AppUser(AbstractUser):
 
     def __str__(self):
         return self.username
-
-    @property
-    def avatar_url(self):
-        if self.avatar:
-            return self.avatar.url
-        else:
-            return None
-
