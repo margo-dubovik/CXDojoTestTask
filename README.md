@@ -15,9 +15,11 @@ In that file define the following variables:
 ```python manage.py migrate users```
 
 ```python manage.py migrate```
-7. ```python manage.py createsuperuser```, create a superuser.
-8. ```python manage.py runserver```
+
+
+8. ```python manage.py createsuperuser```, create a superuser.
+9. ```python manage.py runserver```
 You will be taken to login page. Log in with superuser credentials you`ve created on previous step.
-9. Click the 'Collect information' button. 
-10. Upload .csv and .xml files, press 'Collect Info'.
-11. You`ll be redirected to the page with users info.
+10. Click the 'Collect information' button. 
+11. Upload .csv and .xml files, press 'Collect Info'.
+12. You`ll be redirected to the page with users info.
