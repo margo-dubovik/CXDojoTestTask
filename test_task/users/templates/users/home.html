@@ -1,6 +1,43 @@
 {% extends 'users/base.html' %}
 {% block body %}
 
-Welcome to the app, {{ user.username }}!
+<div class="container">
+<h2>Welcome to the app, <strong>{{ user.username }}</strong>!</h2>
+</div>
+
+{% if user.is_staff %}
+<div class="container">
+    <h2>App Users Information:</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Date joined</th>
+            <th scope="col">Avatar</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for app_user in app_users %}
+        <tr>
+            <th scope="row">{{ app_user.id }}</th>
+            <td>{{ app_user.username }}</td>
+            <td>{{ app_user.first_name }}</td>
+            <td>{{ app_user.last_name }}</td>
+            <td>{{ app_user.date_joined }}</td>
+            {% if app_user.avatar %}
+                <td><img class="img-responsive" src="{{ app_user.avatar_url }}" style="width:100%;" alt="avatar"></td>
+            {% else %}
+            <td><p>No avatar</p></td>
+            {% endif %}
+        </tr>
+    {% empty %}
+        <p>No users yet!</p>
+        <a href="{% url 'collect-info' %}" class="btn btn-dark">Collect information</a>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% endblock %}

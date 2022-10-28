@@ -4,7 +4,7 @@ from django.db import models
 
 class AppUser(AbstractUser):
     username = models.CharField(max_length=256, unique=True)
-    avatar = models.ImageField(upload_to='user_image', blank=True)
+    avatar = models.ImageField(upload_to='user_avatar', blank=True)
 
     def __str__(self):
         return self.username
