@@ -13,7 +13,7 @@
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Username</th>
-            <th scope="col">First name</th>
+            <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Date joined</th>
             <th scope="col">Avatar</th>
@@ -28,7 +28,7 @@
             <td>{{ app_user.last_name }}</td>
             <td>{{ app_user.date_joined }}</td>
             {% if app_user.avatar %}
-                <td><img class="img-responsive" src="{{ app_user.avatar_url }}" style="width:100%;" alt="avatar"></td>
+                <td><img class="img-responsive" src="{{ app_user.avatar }}" style="width:20%;" alt="avatar"></td>
             {% else %}
             <td><p>No avatar</p></td>
             {% endif %}

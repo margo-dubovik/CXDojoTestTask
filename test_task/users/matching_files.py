@@ -81,10 +81,9 @@ def collect_users_data(csv_file_name, xml_file_name):
 
 
 if __name__ == '__main__':
-    folder = 'source_files'
-    csv_file = "test_task.csv"
-    xml_file = "test_task.xml"
+    csv_file = "source_files/test_task.csv"
+    xml_file = "source_files/test_task.xml"
 
-    complete_user_data = collect_users_data(folder, csv_file, xml_file)
+    complete_user_data = collect_users_data(csv_file, xml_file)
     for record in complete_user_data:
         print(record)
